@@ -9,7 +9,6 @@ import warnings
 import string
 import collections
 import math
-import sets
 import random
 
 #import third-party modules
