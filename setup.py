@@ -9,12 +9,12 @@ setup(
     author_email ="kirill.tsyganov@monash.edu",
     description = "RNAseq QCs suite",
     packages=find_packages(exclude=['test']),
-    zip_safe=False
+    zip_safe=False,
     keywords = 'RNA-seq, RNAseq, QC, metrics',
     scripts = ['scripts/rseqc'],
     install_requires = ['pysam',
                         'bx-python'
-                        ], 
+                        ],
     )
 
 #setup_requires=['numpy'],
