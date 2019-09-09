@@ -5,7 +5,7 @@ The following reads will be skipped:
     qc_failed
     PCR duplicate
     Unmapped
-    Non-primary (or secondary)  
+    Non-primary (or secondary)
 '''
 
 #import built-in modules
@@ -71,33 +71,33 @@ def process_gene_model(gene_model, file_type):
     cds_exon = gene_obj.getCDSExon()
     # getIntron method returns list of lists where nested list has 3 elements
     intron = gene_obj.getIntron()
-    # I think the unionBed3 tries to collaps all overlapping regions... 
+    # I think the unionBed3 tries to collaps all overlapping regions...
     intron = BED.unionBed3(intron)
     cds_exon = BED.unionBed3(cds_exon)
     utr_5 = BED.unionBed3(utr_5)
     utr_3 = BED.unionBed3(utr_3)
-    
+
     utr_5 = BED.subtractBed3(utr_5, cds_exon)
     utr_3 = BED.subtractBed3(utr_3, cds_exon)
     intron = BED.subtractBed3(intron, cds_exon)
     intron = BED.subtractBed3(intron, utr_5)
     intron = BED.subtractBed3(intron, utr_3)
-    
+
     intergenic_up_1kb = gene_obj.getIntergenic(direction="up",size=1000)
     intergenic_down_1kb = gene_obj.getIntergenic(direction="down",size=1000)
     intergenic_up_5kb = gene_obj.getIntergenic(direction="up",size=5000)
-    intergenic_down_5kb = gene_obj.getIntergenic(direction="down",size=5000)    
+    intergenic_down_5kb = gene_obj.getIntergenic(direction="down",size=5000)
     intergenic_up_10kb = gene_obj.getIntergenic(direction="up",size=10000)
     intergenic_down_10kb = gene_obj.getIntergenic(direction="down",size=10000)
-    
+
     #merge integenic region
     intergenic_up_1kb=BED.unionBed3(intergenic_up_1kb)
     intergenic_up_5kb=BED.unionBed3(intergenic_up_5kb)
     intergenic_up_10kb=BED.unionBed3(intergenic_up_10kb)
     intergenic_down_1kb=BED.unionBed3(intergenic_down_1kb)
     intergenic_down_5kb=BED.unionBed3(intergenic_down_5kb)
-    intergenic_down_10kb=BED.unionBed3(intergenic_down_10kb)    
-    
+    intergenic_down_10kb=BED.unionBed3(intergenic_down_10kb)
+
     #purify intergenic region
     intergenic_up_1kb=BED.subtractBed3(intergenic_up_1kb,cds_exon)
     intergenic_up_1kb=BED.subtractBed3(intergenic_up_1kb,utr_5)
@@ -106,8 +106,8 @@ def process_gene_model(gene_model, file_type):
     intergenic_down_1kb=BED.subtractBed3(intergenic_down_1kb,cds_exon)
     intergenic_down_1kb=BED.subtractBed3(intergenic_down_1kb,utr_5)
     intergenic_down_1kb=BED.subtractBed3(intergenic_down_1kb,utr_3)
-    intergenic_down_1kb=BED.subtractBed3(intergenic_down_1kb,intron)    
-    
+    intergenic_down_1kb=BED.subtractBed3(intergenic_down_1kb,intron)
+
     #purify intergenic region
     intergenic_up_5kb=BED.subtractBed3(intergenic_up_5kb,cds_exon)
     intergenic_up_5kb=BED.subtractBed3(intergenic_up_5kb,utr_5)
@@ -116,8 +116,8 @@ def process_gene_model(gene_model, file_type):
     intergenic_down_5kb=BED.subtractBed3(intergenic_down_5kb,cds_exon)
     intergenic_down_5kb=BED.subtractBed3(intergenic_down_5kb,utr_5)
     intergenic_down_5kb=BED.subtractBed3(intergenic_down_5kb,utr_3)
-    intergenic_down_5kb=BED.subtractBed3(intergenic_down_5kb,intron)    
-    
+    intergenic_down_5kb=BED.subtractBed3(intergenic_down_5kb,intron)
+
     #purify intergenic region
     intergenic_up_10kb=BED.subtractBed3(intergenic_up_10kb,cds_exon)
     intergenic_up_10kb=BED.subtractBed3(intergenic_up_10kb,utr_5)
@@ -126,21 +126,21 @@ def process_gene_model(gene_model, file_type):
     intergenic_down_10kb=BED.subtractBed3(intergenic_down_10kb,cds_exon)
     intergenic_down_10kb=BED.subtractBed3(intergenic_down_10kb,utr_5)
     intergenic_down_10kb=BED.subtractBed3(intergenic_down_10kb,utr_3)
-    intergenic_down_10kb=BED.subtractBed3(intergenic_down_10kb,intron)  
-    
-    #build intervalTree 
+    intergenic_down_10kb=BED.subtractBed3(intergenic_down_10kb,intron)
+
+    #build intervalTree
     cds_exon_ranges = build_bitsets(cds_exon)
     utr_5_ranges = build_bitsets(utr_5)
     utr_3_ranges = build_bitsets(utr_3)
     intron_ranges = build_bitsets(intron)
-    
+
     interg_ranges_up_1kb_ranges = build_bitsets(intergenic_up_1kb)
     interg_ranges_up_5kb_ranges = build_bitsets(intergenic_up_5kb)
     interg_ranges_up_10kb_ranges = build_bitsets(intergenic_up_10kb)
     interg_ranges_down_1kb_ranges = build_bitsets(intergenic_down_1kb)
     interg_ranges_down_5kb_ranges = build_bitsets(intergenic_down_5kb)
     interg_ranges_down_10kb_ranges = build_bitsets(intergenic_down_10kb)
-    
+
     exon_size = cal_size(cds_exon)
     intron_size = cal_size(intron)
     utr3_size = cal_size(utr_3)
@@ -151,7 +151,7 @@ def process_gene_model(gene_model, file_type):
     int_down1k_size = cal_size(intergenic_down_1kb)
     int_down5k_size = cal_size(intergenic_down_5kb)
     int_down10k_size = cal_size(intergenic_down_10kb)
-    
+
     return (cds_exon_ranges,
             utr_5_ranges,
             utr_3_ranges,
@@ -223,7 +223,7 @@ def do_work(input_file, genes_obj, outdir):
     R_duplicate=0
     R_nonprimary=0
     R_unmap=0
-    
+
     try:
         while(1):
             aligned_read = next(obj.samfile)
@@ -238,13 +238,13 @@ def do_work(input_file, genes_obj, outdir):
                 continue
             if aligned_read.is_unmapped:        #skip unmap read
                 R_unmap +=1
-                continue        
+                continue
             totalReads +=1
             chrom = obj.samfile.getrname(aligned_read.tid)
             chrom = chrom.upper()
             exons = bam_cigar.fetch_exon(chrom, aligned_read.pos, aligned_read.cigar)
             totalFrags += len(exons)
-            
+
             for exn in exons:
                 #print chrom + '\t' + str(exn[1]) + '\t' + str(exn[2])
                 mid = int(exn[1]) + int((int(exn[2]) - int(exn[1]))/2)
@@ -265,7 +265,7 @@ def do_work(input_file, genes_obj, outdir):
                     continue
                 elif foundone(chrom,intergenic_up_10kb_r,mid,mid) >0 and foundone(chrom,intergenic_down_10kb_r,mid,mid) > 0:
                     unAssignFrags +=1
-                    continue                    
+                    continue
                 elif foundone(chrom,intergenic_up_1kb_r,mid,mid) >0:
                     intergenic_up1kb_read += 1
                     intergenic_up5kb_read += 1
@@ -275,7 +275,7 @@ def do_work(input_file, genes_obj, outdir):
                     intergenic_up10kb_read += 1
                 elif foundone(chrom,intergenic_up_10kb_r,mid,mid) >0:
                     intergenic_up10kb_read += 1
-                
+
                 elif foundone(chrom,intergenic_down_1kb_r,mid,mid) >0:
                     intergenic_down1kb_read += 1
                     intergenic_down5kb_read += 1
@@ -284,7 +284,7 @@ def do_work(input_file, genes_obj, outdir):
                     intergenic_down5kb_read += 1
                     intergenic_down10kb_read += 1
                 elif foundone(chrom,intergenic_down_10kb_r,mid,mid) >0:
-                    intergenic_down10kb_read += 1   
+                    intergenic_down10kb_read += 1
                 else:
                     unAssignFrags +=1
     except StopIteration:
@@ -292,7 +292,7 @@ def do_work(input_file, genes_obj, outdir):
 
     #TODO A better way would if this function simply returns some dictionary/list
     # that I can then parse out and write to file in the main function below
-    # But for now I'll go a simpler way, mainly because I don't want to spent time 
+    # But for now I'll go a simpler way, mainly because I don't want to spent time
     # understanding all diff parameters
 
     prefix = os.path.basename(input_file).split(".bam")[0]
@@ -315,7 +315,7 @@ def do_work(input_file, genes_obj, outdir):
     print("%-20s%-20d%-20d%-18.2f" % ("TSS_up_5kb",intergenic_up5kb_base, intergenic_up5kb_read, intergenic_up5kb_read*1000.0/(intergenic_up5kb_base+1)), file = fd)
     print("%-20s%-20d%-20d%-18.2f" % ("TSS_up_10kb",intergenic_up10kb_base, intergenic_up10kb_read, intergenic_up10kb_read*1000.0/(intergenic_up10kb_base+1)), file = fd)
     print("%-20s%-20d%-20d%-18.2f" % ("TES_down_1kb",intergenic_down1kb_base, intergenic_down1kb_read, intergenic_down1kb_read*1000.0/(intergenic_down1kb_base+1)), file = fd)
-    print("%-20s%-20d%-20d%-18.2f" % ("TES_down_5kb",intergenic_down5kb_base, intergenic_down5kb_read, intergenic_down5kb_read*1000.0/(intergenic_down5kb_base+1)), file = fd) 
+    print("%-20s%-20d%-20d%-18.2f" % ("TES_down_5kb",intergenic_down5kb_base, intergenic_down5kb_read, intergenic_down5kb_read*1000.0/(intergenic_down5kb_base+1)), file = fd)
     print("%-20s%-20d%-20d%-18.2f" % ("TES_down_10kb",intergenic_down10kb_base, intergenic_down10kb_read, intergenic_down10kb_read*1000.0/(intergenic_down10kb_base+1)), file = fd)
     print("=====================================================================", file = fd)
 
