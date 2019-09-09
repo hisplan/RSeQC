@@ -327,14 +327,14 @@ def main(input_files, gene_models, file_type, outdir):
 
     if not os.path.exists(outdir):
         logger.info(" Making output directory > %s" % outdir)
-        os.mkdir(outdir)
+        os.makedirs(outdir, exist_ok=True)
 
     genes_obj = process_gene_model(gene_models, file_type)
 
     processes = None
 
     for f in input_files:
-        #do_work(f, genes_obj, outdir)
-        processes = [Process(target=do_work, args=(gene_obj, outdir))]
+        do_work(f, genes_obj, outdir)
+        # processes = [Process(target=do_work, args=(gene_obj, outdir))]
 
 
